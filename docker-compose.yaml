@@ -1,0 +1,68 @@
+#version: '3.8'
+
+volumes:
+  mongo-vol:
+  postgres-vol:
+
+
+networks:
+  rotten-net:
+    driver: bridge
+
+services:
+  api:
+    image: edugomesti/rotten-potatoes-ms:v1
+    ports:
+      - 5000:5000
+    networks:
+      - rotten-net
+    environment:
+      MOVIE_SERVICE_URI: movie:8181
+      REVIEW_SERVICE_URI: review:8282
+    depends_on:
+      - movie
+      - review
+
+  movie:
+    image: edugomesti/movies:v1
+    ports:
+      - 8181:8181
+    networks:
+      - rotten-net
+    environment:
+      MONGODB_URI: mongodb://mongouser:mongopwd@mongodb:27017/admin
+    depends_on:
+      - mongodb
+
+  review:
+    image: edugomesti/review:v1
+    ports:
+      - 8282:8282
+    networks:
+      - rotten-net
+    depends_on:
+      - postgres
+
+  mongodb:
+    image: mongo:5.0.8
+    ports:
+      - 27017:27017
+    networks:
+      - rotten-net
+    volumes:
+      - mongo-vol:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongouser
+      MONGO_INITDB_ROOT_PASSWORD: mongopwd
+
+  postgres:
+    image: postgres:14.2
+    ports:
+      - 5432:5432
+    networks:
+      - rotten-net
+    volumes:
+      - postgres-vol:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: pguser
+      POSTGRES_PASSWORD: Pg@123

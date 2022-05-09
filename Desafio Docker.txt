@@ -1,0 +1,36 @@
+Desafio Docker
+
+MongoDB:
+docker container run -d --network mongo-net -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=mongouser -e MONGO_INITDB_ROOT_PASSWORD=mongopwd -v ${pwd}/mongodb:/data/db --name mongodb mongo:5.0.8
+
+MariaDB
+docker container run -d --network mariadb-net -p 3306:3306 -v ${pwd}/mariadb:/var/lib/mysql -e MARIADB_USER=user -e MARIADB_PASSWORD=secret -e MARIADB_ROOT_PASSWORD=1234 --name mariadb mariadb
+
+Postgres
+docker container run -d --network postgres-net -p 5432:5432 -v ${pwd}\postgres:/var/lib/postgresql/data -e POSTGRES_PASSWORD=1234 --name postgres postgres
+
+Redis
+docker container run -d --network redis-net -p 6379:6379 -v ${pwd}\redis:/data --name redis redis
+
+Mongo Express
+docker container run -d --network mongo-net -p 8081:8081 -e ME_CONFIG_MONGODB_SERVER=172.18.0.2 -e ME_CONFIG_MONGODB_PORT=27017 -e ME_CONFIG_MONGODB_ADMINUSERNAME=mongouser -e ME_CONFIG_MONGODB_ADMINPASSWORD=mongopwd --name mongo-express mongo-express
+
+PhpMyAdmin
+docker container run -d --network mariadb-net -p 8080:80 -e PMA_HOST=172.19.0.2 -e PMA_PORT=3306 --name phpmyadmin phpmyadmin/phpmyadmin
+
+PgAdmin
+docker container run -d --network postgres-net -p 8082:80 -e PGADMIN_DEFAULT_EMAIL=dudolino@gmail.com -e PGADMIN_DEFAULT_PASSWORD=1234 --name pgadmin dpage/pgadmin4
+
+Redis-Commander
+docker container run -d --network redis-net -p 8081:8081 -e REDIS_HOSTS=172.21.0.2 --name rediscom rediscommander/redis-commander
+
+3
+https://github.com/EduGomesTI/conversao-temperatura
+https://github.com/EduGomesTI/conversao-distancia
+https://github.com/EduGomesTI/conversao-peso
+
+4
+docker container run -d -p 5000:5000 --name rotten edugomesti/rotten-potatoes
+
+5
+docker container run -d -p 8080:80 --name wordpress wordpress
